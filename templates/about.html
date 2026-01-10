@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - MyJournal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('home') }}" class="text-2xl font-bold text-white">📔 MyJournal</a>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="{{ url_for('home') }}" class="text-white hover:text-purple-200 transition duration-300">Home</a>
+                    <a href="{{ url_for('contact') }}" class="text-white hover:text-purple-200 transition duration-300">Contact</a>
+                    <a href="{{ url_for('about') }}" class="text-white font-semibold">About</a>
+                    {% if session.get('user_id') %}
+                        <a href="{{ url_for('dashboard') }}" class="bg-white text-purple-700 px-4 py-2 rounded-lg font-semibold hover:bg-purple-100 transition duration-300">Dashboard</a>
+                    {% else %}
+                        <a href="{{ url_for('home') }}" class="bg-white text-purple-700 px-4 py-2 rounded-lg font-semibold hover:bg-purple-100 transition duration-300">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="gradient-bg py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-bold text-white mb-4 fade-in">About MyJournal</h1>
+            <p class="text-xl text-purple-100 max-w-3xl mx-auto fade-in" style="animation-delay: 0.2s;">
+                Your personal space for reflection, growth, and preserving precious memories.
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Mission Section -->
+        <div class="bg-white rounded-2xl shadow-xl p-12 mb-12 fade-in">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">🎯</div>
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Mission</h2>
+            </div>
+            <p class="text-xl text-gray-700 text-center max-w-4xl mx-auto leading-relaxed">
+                MyJournal was created to provide a safe, private, and beautiful space for people to document their lives, 
+                reflect on their experiences, and preserve their memories. We believe that journaling is a powerful tool 
+                for self-discovery, mental wellness, and personal growth.
+            </p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid md:grid-cols-3 gap-8 mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-8 text-center fade-in" style="animation-delay: 0.1s;">
+                <div class="text-5xl mb-4">🔒</div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3">Private & Secure</h3>
+                <p class="text-gray-600">
+                    Your thoughts are yours alone. We use industry-standard encryption to keep your entries completely private and secure.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-8 text-center fade-in" style="animation-delay: 0.2s;">
+                <div class="text-5xl mb-4">✨</div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3">Beautiful Design</h3>
+                <p class="text-gray-600">
+                    A clean, intuitive interface that makes journaling a joy. Write your thoughts in a distraction-free environment.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-8 text-center fade-in" style="animation-delay: 0.3s;">
+                <div class="text-5xl mb-4">📱</div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3">Access Anywhere</h3>
+                <p class="text-gray-600">
+                    Write from your computer, tablet, or phone. Your journal is always accessible whenever inspiration strikes.
+                </p>
+            </div>
+        </div>
+
+        <!-- Story Section -->
+        <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-12 mb-12 fade-in">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">The Story Behind MyJournal</h2>
+            <div class="max-w-4xl mx-auto space-y-6 text-gray-700 text-lg leading-relaxed">
+                <p>
+                    MyJournal was born from a simple idea: everyone deserves a beautiful, private space to capture their thoughts 
+                    and experiences. As a computer science student at JECRC University, I recognized the importance of mental wellness 
+                    and self-reflection in our fast-paced digital world.
+                </p>
+                <p>
+                    After participating in Smart India Hackathon 2023 with the Sukoon mental wellness project, I was inspired to 
+                    create a dedicated platform for daily journaling. MyJournal combines modern web technologies with thoughtful 
+                    design to make journaling accessible, enjoyable, and meaningful.
+                </p>
+                <p>
+                    Whether you're documenting your daily experiences, tracking your personal growth, or simply need a place to 
+                    organize your thoughts, MyJournal is here to support your journey of self-discovery.
+                </p>
+            </div>
+        </div>
+
+        <!-- Developer Section -->
+        <div class="bg-white rounded-2xl shadow-xl p-12 mb-12 fade-in">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">👨‍💻</div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Meet the Developer</h2>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-purple-50 rounded-xl p-8">
+                    <h3 class="text-2xl font-bold text-purple-900 mb-4">Aman Tomar</h3>
+                    <p class="text-gray-700 mb-4">
+                        Computer Science & Engineering Student at JECRC University (CGPA: 9.23/10.0)
+                    </p>
+                    
+                    <div class="space-y-3 text-gray-700">
+                        <p><strong>🏆 Achievements:</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-2">
+                            <li>Smart India Hackathon 2023 National Participant</li>
+                            <li>Developed Sukoon - Mental Wellness Platform</li>
+                            <li>Passionate about web development and data analysis</li>
+                            <li>Proficient in Python, JavaScript, Flask, and modern web technologies</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-6 flex justify-center space-x-4">
+                        <a href="https://linkedin.com/in/tomaraman" target="_blank" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">
+                            LinkedIn Profile
+                        </a>
+                        <a href="https://github.com/aman-Tomar-30" target="_blank" class="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition duration-300 font-semibold">
+                            GitHub Profile
+                        </a>
+                        <a href="mailto:amantomar2609@gmail.com" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition duration-300 font-semibold">
+                            Contact Me
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="bg-white rounded-2xl shadow-xl p-12 fade-in">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Built With Modern Technology</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center p-6 bg-blue-50 rounded-lg">
+                    <div class="text-4xl mb-2">🐍</div>
+                    <h4 class="font-bold text-gray-900">Python Flask</h4>
+                    <p class="text-sm text-gray-600">Backend Framework</p>
+                </div>
+                
+                <div class="text-center p-6 bg-green-50 rounded-lg">
+                    <div class="text-4xl mb-2">🗄️</div>
+                    <h4 class="font-bold text-gray-900">SQLAlchemy</h4>
+                    <p class="text-sm text-gray-600">Database ORM</p>
+                </div>
+                
+                <div class="text-center p-6 bg-purple-50 rounded-lg">
+                    <div class="text-4xl mb-2">🎨</div>
+                    <h4 class="font-bold text-gray-900">Tailwind CSS</h4>
+                    <p class="text-sm text-gray-600">Modern Styling</p>
+                </div>
+                
+                <div class="text-center p-6 bg-yellow-50 rounded-lg">
+                    <div class="text-4xl mb-2">⚡</div>
+                    <h4 class="font-bold text-gray-900">JavaScript</h4>
+                    <p class="text-sm text-gray-600">Interactive Features</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="text-center mt-16 fade-in">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Start Journaling?</h2>
+            <p class="text-xl text-gray-600 mb-8">Join thousands of users who trust MyJournal with their thoughts and memories.</p>
+            <a href="{{ url_for('home') }}" class="inline-block gradient-bg text-white px-12 py-4 rounded-lg font-semibold hover:opacity-90 transform hover:scale-105 transition duration-300 shadow-lg text-lg">
+                Get Started Free
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center text-gray-600">
+                <p>&copy; 2025 MyJournal. Made with ❤️ by Aman Tomar</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

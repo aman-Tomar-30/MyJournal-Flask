@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Entry - MyJournal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-white">📔 MyJournal</h1>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="{{ url_for('dashboard') }}" class="text-white hover:text-purple-200 transition duration-300">Dashboard</a>
+                    <a href="{{ url_for('create_entry') }}" class="text-white hover:text-purple-200 transition duration-300">New Entry</a>
+                    <a href="{{ url_for('logout') }}" class="text-white hover:text-purple-200 transition duration-300">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Header -->
+        <div class="mb-8 fade-in">
+            <h2 class="text-4xl font-bold text-gray-900 mb-2">✍️ Write Your Thoughts</h2>
+            <p class="text-gray-600">Capture your day, reflect on your experiences, and preserve your memories.</p>
+        </div>
+
+        <!-- Create Entry Form -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 fade-in" style="animation-delay: 0.2s;">
+            <form action="{{ url_for('create_entry') }}" method="POST" class="space-y-6">
+                <!-- Date Display -->
+                <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl">📅</span>
+                            <div>
+                                <p class="text-sm text-gray-600">Today's Date</p>
+                                <p class="text-lg font-semibold text-purple-700" id="current-date"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl">🕐</span>
+                            <div>
+                                <p class="text-sm text-gray-600">Current Time</p>
+                                <p class="text-lg font-semibold text-purple-700" id="current-time"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Title Input -->
+                <div>
+                    <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Entry Title
+                    </label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        name="title" 
+                        required 
+                        placeholder="Give your entry a meaningful title..."
+                        class="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition duration-300"
+                    >
+                </div>
+
+                <!-- Content Textarea -->
+                <div>
+                    <label for="content" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Your Thoughts
+                    </label>
+                    <textarea 
+                        id="content" 
+                        name="content" 
+                        required 
+                        rows="15" 
+                        placeholder="Start writing your thoughts, feelings, and experiences here...
+
+What happened today?
+How are you feeling?
+What are you grateful for?
+What did you learn?"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition duration-300 resize-none"
+                    ></textarea>
+                    <div class="flex justify-between items-center mt-2">
+                        <p class="text-sm text-gray-500">Write as much as you'd like</p>
+                        <p class="text-sm text-gray-500">
+                            <span id="word-count">0</span> words
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Mood Selector (Optional) -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">
+                        How are you feeling today? (Optional)
+                    </label>
+                    <div class="flex space-x-4">
+                        <button type="button" class="mood-btn text-4xl hover:scale-125 transition duration-300" title="Happy">😊</button>
+                        <button type="button" class="mood-btn text-4xl hover:scale-125 transition duration-300" title="Sad">😢</button>
+                        <button type="button" class="mood-btn text-4xl hover:scale-125 transition duration-300" title="Excited">🤩</button>
+                        <button type="button" class="mood-btn text-4xl hover:scale-125 transition duration-300" title="Calm">😌</button>
+                        <button type="button" class="mood-btn text-4xl hover:scale-125 transition duration-300" title="Angry">😠</button>
+                        <button type="button" class="mood-btn text-4xl hover:scale-125 transition duration-300" title="Thoughtful">🤔</button>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-4 pt-6 border-t border-gray-200">
+                    <button 
+                        type="submit" 
+                        class="flex-1 gradient-bg text-white py-4 rounded-lg font-semibold hover:opacity-90 transform hover:scale-105 transition duration-300 shadow-lg text-lg"
+                    >
+                        💾 Save Entry
+                    </button>
+                    <a 
+                        href="{{ url_for('dashboard') }}" 
+                        class="px-8 py-4 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition duration-300 text-lg"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 fade-in" style="animation-delay: 0.4s;">
+            <h3 class="text-lg font-bold text-gray-900 mb-3">💡 Journaling Tips</h3>
+            <ul class="space-y-2 text-gray-700">
+                <li class="flex items-start">
+                    <span class="text-purple-600 mr-2">•</span>
+                    <span>Write freely without worrying about grammar or structure</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-purple-600 mr-2">•</span>
+                    <span>Focus on how you feel and what you experienced</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-purple-600 mr-2">•</span>
+                    <span>Try to write at the same time each day to build a habit</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-purple-600 mr-2">•</span>
+                    <span>Be honest with yourself - this is your private space</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Format date
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', dateOptions);
+            
+            // Format time
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('en-US', timeOptions);
+        }
+        
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // Word counter
+        const contentTextarea = document.getElementById('content');
+        const wordCountSpan = document.getElementById('word-count');
+        
+        contentTextarea.addEventListener('input', function() {
+            const text = this.value.trim();
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            wordCountSpan.textContent = words.length;
+        });
+
+        // Mood selector
+        const moodButtons = document.querySelectorAll('.mood-btn');
+        moodButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                moodButtons.forEach(b => b.classList.remove('ring-4', 'ring-purple-500'));
+                this.classList.add('ring-4', 'ring-purple-500');
+            });
+        });
+
+        // Auto-save draft (optional feature)
+        let autoSaveTimer;
+        contentTextarea.addEventListener('input', function() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                // Save to localStorage as draft
+                localStorage.setItem('draft_title', document.getElementById('title').value);
+                localStorage.setItem('draft_content', this.value);
+                console.log('Draft saved!');
+            }, 2000);
+        });
+
+        // Load draft on page load
+        window.addEventListener('load', function() {
+            const draftTitle = localStorage.getItem('draft_title');
+            const draftContent = localStorage.getItem('draft_content');
+            
+            if (draftTitle || draftContent) {
+                const loadDraft = confirm('You have an unsaved draft. Would you like to load it?');
+                if (loadDraft) {
+                    if (draftTitle) document.getElementById('title').value = draftTitle;
+                    if (draftContent) {
+                        document.getElementById('content').value = draftContent;
+                        // Trigger word count update
+                        contentTextarea.dispatchEvent(new Event('input'));
+                    }
+                }
+            }
+        });
+
+        // Clear draft on successful submit
+        document.querySelector('form').addEventListener('submit', function() {
+            localStorage.removeItem('draft_title');
+            localStorage.removeItem('draft_content');
+        });
+    </script>
+</body>
+</html>

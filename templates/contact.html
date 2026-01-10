@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - MyJournal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('home') }}" class="text-2xl font-bold text-white">📔 MyJournal</a>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="{{ url_for('home') }}" class="text-white hover:text-purple-200 transition duration-300">Home</a>
+                    <a href="{{ url_for('contact') }}" class="text-white font-semibold">Contact</a>
+                    <a href="{{ url_for('about') }}" class="text-white hover:text-purple-200 transition duration-300">About</a>
+                    {% if session.get('user_id') %}
+                        <a href="{{ url_for('dashboard') }}" class="bg-white text-purple-700 px-4 py-2 rounded-lg font-semibold hover:bg-purple-100 transition duration-300">Dashboard</a>
+                    {% else %}
+                        <a href="{{ url_for('home') }}" class="bg-white text-purple-700 px-4 py-2 rounded-lg font-semibold hover:bg-purple-100 transition duration-300">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="gradient-bg py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-bold text-white mb-4 fade-in">Get In Touch</h1>
+            <p class="text-xl text-purple-100 fade-in" style="animation-delay: 0.2s;">We'd love to hear from you! Send us a message and we'll respond as soon as possible.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- Contact Form -->
+            <div class="fade-in">
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
+                    
+                    <form action="#" method="POST" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Your Name</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition duration-300"
+                                placeholder="John Doe"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition duration-300"
+                                placeholder="your@email.com"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
+                            <input 
+                                type="text" 
+                                id="subject" 
+                                name="subject" 
+                                required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition duration-300"
+                                placeholder="How can we help?"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Message</label>
+                            <textarea 
+                                id="message" 
+                                name="message" 
+                                required 
+                                rows="6"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition duration-300 resize-none"
+                                placeholder="Tell us what's on your mind..."
+                            ></textarea>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            class="w-full gradient-bg text-white py-4 rounded-lg font-semibold hover:opacity-90 transform hover:scale-105 transition duration-300 shadow-lg"
+                        >
+                            📨 Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="fade-in" style="animation-delay: 0.2s;">
+                <div class="space-y-8">
+                    <!-- Contact Details -->
+                    <div class="bg-white rounded-2xl shadow-xl p-8">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-6">Contact Information</h2>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-2xl">📧</span>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">Email</h3>
+                                    <p class="text-gray-600">amantomar2609@gmail.com</p>
+                                    <p class="text-gray-600">support@myjournal.com</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-2xl">📱</span>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">Phone</h3>
+                                    <p class="text-gray-600">+91-7000191996</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-2xl">📍</span>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">Location</h3>
+                                    <p class="text-gray-600">JECRC University</p>
+                                    <p class="text-gray-600">Jaipur, Rajasthan, India</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="bg-white rounded-2xl shadow-xl p-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Connect With Us</h2>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="https://linkedin.com/in/tomaraman" target="_blank" class="flex items-center justify-center space-x-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300">
+                                <span>LinkedIn</span>
+                            </a>
+                            <a href="https://github.com/aman-Tomar-30" target="_blank" class="flex items-center justify-center space-x-2 bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-900 transition duration-300">
+                                <span>GitHub</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- FAQ -->
+                    <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6">
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">💡 Quick Questions?</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-start">
+                                <span class="text-purple-600 mr-2">•</span>
+                                <span><strong>Response Time:</strong> We typically respond within 24 hours</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-purple-600 mr-2">•</span>
+                                <span><strong>Support Hours:</strong> Monday - Friday, 9 AM - 6 PM IST</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-purple-600 mr-2">•</span>
+                                <span><strong>Technical Issues:</strong> Email us with screenshots for faster resolution</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center text-gray-600">
+                <p>&copy; 2025 MyJournal. Made with ❤️ by Aman Tomar</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Form submission handling
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
