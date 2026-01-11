@@ -19,7 +19,7 @@ A beautiful, secure, and feature-rich journaling web application built with Flas
 
 ## 🚀 Live Demo
 
-🔗 **[View Live Application](https://your-app-name.onrender.com)**
+🔗 **[View Live Application](https://myjournal-9h9n.onrender.com/)**
 
 ## 📸 Screenshots
 
@@ -188,28 +188,11 @@ This project is licensed under the MIT License.
 
 **Aman Tomar**
 
-- 📧 Email: amantomar2609@gmail.com
 - 💼 LinkedIn: [linkedin.com/in/tomaraman](https://linkedin.com/in/tomaraman)
 - 🐙 GitHub: [github.com/aman-Tomar-30](https://github.com/aman-Tomar-30)
-
-## 🙏 Acknowledgments
-
-- Built as part of college project at JECRC University
-- Inspired by Smart India Hackathon 2023 experience
-- Thanks to Flask and Tailwind CSS communities
-
-## 📈 Future Enhancements
-
-- [ ] Export entries to PDF
-- [ ] Categories and tags
-- [ ] Rich text editor
-- [ ] Dark mode
-- [ ] Email notifications
-- [ ] Data analytics dashboard
-- [ ] Mobile app (React Native)
 
 ---
 
 ⭐ **Star this repo if you found it helpful!**
 
-Made with ❤️ by Aman Tomar
+Made with ❤️ by Aman
