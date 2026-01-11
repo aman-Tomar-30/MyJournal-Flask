@@ -309,4 +309,4 @@ Your app is now:
 
 ---
 
-**Made with ❤️ by Aman Tomar**
+**Made with ❤️ by Aman**

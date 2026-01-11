@@ -104,38 +104,6 @@ myjournal/
     └── myjournal.db       # SQLite database (auto-created)
 ```
 
-## 🚀 Deployment to Render
-
-### Step 1: Prepare Your Repository
-
-Ensure all files are committed:
-```bash
-git add .
-git commit -m "Ready for deployment"
-git push origin main
-```
-
-### Step 2: Deploy on Render
-
-1. Go to [render.com](https://render.com) and sign up
-2. Click **"New +"** → **"Web Service"**
-3. Connect your GitHub repository
-4. Configure:
-   - **Name:** myjournal
-   - **Environment:** Python 3
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `gunicorn app:app`
-5. Click **"Create Web Service"**
-6. Wait 2-3 minutes for deployment ✅
-
-Your app will be live at: `https://your-app-name.onrender.com`
-
-### Step 3: Set Environment Variables (Optional)
-
-In Render dashboard, add:
-- `SECRET_KEY`: Your secret key (auto-generated)
-- `PYTHON_VERSION`: 3.11.0
-
 ## 🔐 Security Features
 
 - ✅ Password hashing with pbkdf2:sha256
