@@ -5,9 +5,15 @@ from datetime import datetime
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-change-this'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///myjournal.db'
+
+# Production-ready configuration
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///myjournal.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Fix for Render's PostgreSQL URL format (if using PostgreSQL)
+if app.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres://'):
+    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace('postgres://', 'postgresql://', 1)
 
 db = SQLAlchemy(app)
 
@@ -176,4 +182,6 @@ with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    # Use environment variables for port (required for deployment)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
