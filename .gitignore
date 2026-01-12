@@ -24,10 +24,10 @@ wheels/
 *.egg
 
 # Flask
-instance/
 .webassets-cache
 
 # Database
+instance/
 *.db
 *.sqlite
 *.sqlite3
