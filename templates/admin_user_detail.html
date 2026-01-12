@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.name }} - User Details</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Admin Navigation -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-white">🛡️ Admin Panel</h1>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="{{ url_for('admin_dashboard') }}" class="text-white hover:text-blue-200 transition">Dashboard</a>
+                    <a href="{{ url_for('admin_users') }}" class="text-white hover:text-blue-200 transition">← Back to Users</a>
+                    <a href="{{ url_for('admin_logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- User Profile Header -->
+        <div class="bg-white rounded-lg shadow-md mb-8 overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-8 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-4xl font-bold mb-2">{{ user.name }}</h2>
+                        <p class="text-lg opacity-90">{{ user.email }}</p>
+                        <p class="text-sm opacity-75 mt-2">Member since {{ user.created_at.strftime('%B %d, %Y') }}</p>
+                    </div>
+                    <div class="text-center bg-white bg-opacity-20 rounded-full p-6">
+                        <p class="text-5xl font-bold">{{ entries|length }}</p>
+                        <p class="text-sm">Total Entries</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-gray-50">
+                <div class="text-center">
+                    <p class="text-3xl font-bold text-blue-600">{{ entries|length }}</p>
+                    <p class="text-sm text-gray-600">Journal Entries</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-3xl font-bold text-green-600">
+                        {% set total_words = namespace(count=0) %}
+                        {% for entry in entries %}
+                            {% set total_words.count = total_words.count + entry.content.split()|length %}
+                        {% endfor %}
+                        {{ total_words.count }}
+                    </p>
+                    <p class="text-sm text-gray-600">Total Words</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-3xl font-bold text-purple-600">
+                        {{ (total_words.count / entries|length)|round(1) if entries|length > 0 else 0 }}
+                    </p>
+                    <p class="text-sm text-gray-600">Avg Words/Entry</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-3xl font-bold text-orange-600">
+                        {% if entries %}
+                            {{ entries[0].created_at.strftime('%b %d') }}
+                        {% else %}
+                            Never
+                        {% endif %}
+                    </p>
+                    <p class="text-sm text-gray-600">Last Entry</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User's Entries -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-gradient-to-r from-green-500 to-teal-600 p-4">
+                <h3 class="text-2xl font-bold text-white">📝 Journal Entries ({{ entries|length }})</h3>
+            </div>
+
+            {% if entries %}
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for entry in entries %}
+                    <div class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-medium text-purple-600 bg-purple-100 px-3 py-1 rounded-full">
+                                {{ entry.created_at.strftime('%B %d, %Y') }}
+                            </span>
+                            <span class="text-xs text-gray-500">
+                                {{ entry.created_at.strftime('%I:%M %p') }}
+                            </span>
+                        </div>
+
+                        <h4 class="text-xl font-bold text-gray-900 mb-3">{{ entry.title }}</h4>
+                        
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            {{ entry.content[:150] }}{% if entry.content|length > 150 %}...{% endif %}
+                        </p>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                            <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                <span>📝 {{ entry.content.split()|length }} words</span>
+                                <span>📊 {{ entry.content|length }} chars</span>
+                            </div>
+                            <button onclick="viewEntry('{{ entry.title }}', '{{ entry.content }}', '{{ entry.created_at.strftime('%b %d, %Y at %I:%M %p') }}')" 
+                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-semibold">
+                                Read Full
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="p-12 text-center">
+                <div class="text-6xl mb-4">📝</div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">No Entries Yet</h3>
+                <p class="text-gray-600">{{ user.name }} hasn't written any journal entries</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Entry Modal -->
+    <div id="entry-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 id="modal-title" class="text-2xl font-bold mb-2"></h2>
+                        <p id="modal-date" class="text-sm opacity-90"></p>
+                    </div>
+                    <button onclick="closeModal()" class="text-white hover:text-gray-200 text-3xl">&times;</button>
+                </div>
+            </div>
+            <div class="p-8">
+                <div id="modal-content" class="prose max-w-none text-gray-800 whitespace-pre-wrap"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center text-gray-600">
+                <p>&copy; 2026 MyJournal Admin Panel</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function viewEntry(title, content, date) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-date').textContent = date;
+            document.getElementById('modal-content').textContent = content;
+            document.getElementById('entry-modal').classList.remove('hidden');
+            document.getElementById('entry-modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('entry-modal').classList.add('hidden');
+            document.getElementById('entry-modal').classList.remove('flex');
+        }
+
+        document.getElementById('entry-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
