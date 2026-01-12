@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Admin Navigation -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-white">🛡️ Admin Panel</h1>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="{{ url_for('admin_dashboard') }}" class="text-white hover:text-blue-200 transition">Dashboard</a>
+                    <a href="{{ url_for('admin_users') }}" class="text-white font-semibold">Users</a>
+                    <a href="{{ url_for('admin_entries') }}" class="text-white hover:text-blue-200 transition">Entries</a>
+                    <a href="{{ url_for('admin_logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">👥 All Users</h2>
+            <p class="text-gray-600">Manage and view all registered users ({{ users|length }} total)</p>
+        </div>
+
+        <!-- Users Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for user in users %}
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition duration-300 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-4">
+                    <h3 class="text-xl font-bold text-white">{{ user.name }}</h3>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-3 mb-4">
+                        <div class="flex items-center text-gray-600">
+                            <span class="font-semibold mr-2">📧</span>
+                            <span class="text-sm">{{ user.email }}</span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <span class="font-semibold mr-2">📅</span>
+                            <span class="text-sm">Joined: {{ user.joined.strftime('%b %d, %Y') }}</span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <span class="font-semibold mr-2">📝</span>
+                            <span class="text-sm">{{ user.entry_count }} journal entries</span>
+                        </div>
+                    </div>
+
+                    <!-- Entry Count Badge -->
+                    <div class="text-center mb-4">
+                        <div class="inline-block bg-purple-100 rounded-full px-6 py-3">
+                            <p class="text-3xl font-bold text-purple-700">{{ user.entry_count }}</p>
+                            <p class="text-xs text-purple-600">Total Entries</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Entries Preview -->
+                    {% if user.entries %}
+                    <div class="mb-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2">Recent Entries:</p>
+                        <div class="space-y-2">
+                            {% for entry in user.entries[:3] %}
+                            <div class="bg-gray-50 rounded p-2">
+                                <p class="text-xs font-semibold text-gray-800">{{ entry.title[:30] }}{% if entry.title|length > 30 %}...{% endif %}</p>
+                                <p class="text-xs text-gray-500">{{ entry.created_at.strftime('%b %d') }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Actions -->
+                    <a href="{{ url_for('admin_user_detail', user_id=user.id) }}" 
+                       class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">
+                        View Full Profile →
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Empty State -->
+        {% if not users %}
+        <div class="bg-white rounded-lg shadow-md p-12 text-center">
+            <div class="text-6xl mb-4">👤</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">No Users Yet</h3>
+            <p class="text-gray-600">Users will appear here once they sign up</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center text-gray-600">
+                <p>&copy; 2026 MyJournal Admin Panel</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
