@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - MyJournal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Admin Navigation -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-white">🛡️ Admin Panel</h1>
+                    <span class="text-sm text-blue-200">MyJournal</span>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="{{ url_for('admin_dashboard') }}" class="text-white font-semibold">Dashboard</a>
+                    <a href="{{ url_for('admin_users') }}" class="text-white hover:text-blue-200 transition">Users</a>
+                    <a href="{{ url_for('admin_entries') }}" class="text-white hover:text-blue-200 transition">Entries</a>
+                    <a href="{{ url_for('home') }}" class="text-white hover:text-blue-200 transition">MyJournal</a>
+                    <a href="{{ url_for('admin_logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="max-w-7xl mx-auto px-4 mt-4">
+                {% for category, message in messages %}
+                <div class="{% if category == 'error' %}bg-red-100 border-red-400 text-red-700{% else %}bg-green-100 border-green-400 text-green-700{% endif %} px-4 py-3 rounded-lg border mb-4">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8 fade-in">
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h2>
+            <p class="text-gray-600">Monitor MyJournal platform statistics and user activity</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Users -->
+            <div class="bg-white rounded-lg shadow-md p-6 fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Users</p>
+                        <p class="text-3xl font-bold text-blue-600">{{ total_users }}</p>
+                    </div>
+                    <div class="text-5xl">👥</div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">+{{ today_users }} today</p>
+            </div>
+
+            <!-- Total Entries -->
+            <div class="bg-white rounded-lg shadow-md p-6 fade-in" style="animation-delay: 0.1s;">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Entries</p>
+                        <p class="text-3xl font-bold text-green-600">{{ total_entries }}</p>
+                    </div>
+                    <div class="text-5xl">📝</div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">+{{ today_entries }} today</p>
+            </div>
+
+            <!-- Average Entries -->
+            <div class="bg-white rounded-lg shadow-md p-6 fade-in" style="animation-delay: 0.2s;">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Avg per User</p>
+                        <p class="text-3xl font-bold text-purple-600">{{ "%.1f"|format(total_entries / total_users if total_users > 0 else 0) }}</p>
+                    </div>
+                    <div class="text-5xl">📊</div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">entries/user</p>
+            </div>
+
+            <!-- Active Today -->
+            <div class="bg-white rounded-lg shadow-md p-6 fade-in" style="animation-delay: 0.3s;">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Active Today</p>
+                        <p class="text-3xl font-bold text-orange-600">{{ today_users + today_entries }}</p>
+                    </div>
+                    <div class="text-5xl">🔥</div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">total activities</p>
+            </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Recent Users -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden fade-in" style="animation-delay: 0.4s;">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-4">
+                    <h3 class="text-xl font-bold text-white">👥 Recent Users</h3>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        {% for user in users_data[:5] %}
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                            <div class="flex-1">
+                                <a href="{{ url_for('admin_user_detail', user_id=user.id) }}" class="font-semibold text-gray-900 hover:text-blue-600">
+                                    {{ user.name }}
+                                </a>
+                                <p class="text-sm text-gray-600">{{ user.email }}</p>
+                                <p class="text-xs text-gray-500">Joined: {{ user.joined.strftime('%b %d, %Y') }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-blue-600">{{ user.entry_count }}</p>
+                                <p class="text-xs text-gray-500">entries</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-4 text-center">
+                        <a href="{{ url_for('admin_users') }}" class="text-blue-600 hover:text-blue-700 font-semibold text-sm">
+                            View All Users →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Entries -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden fade-in" style="animation-delay: 0.5s;">
+                <div class="bg-gradient-to-r from-green-500 to-teal-600 p-4">
+                    <h3 class="text-xl font-bold text-white">📝 Recent Entries</h3>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        {% for entry in recent_entries %}
+                        <div class="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="font-semibold text-gray-900">{{ entry.title[:40] }}{% if entry.title|length > 40 %}...{% endif %}</p>
+                                <span class="text-xs text-gray-500">{{ entry.created_at.strftime('%b %d') }}</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">{{ entry.content[:80] }}{% if entry.content|length > 80 %}...{% endif %}</p>
+                            <p class="text-xs text-gray-500">By: {{ entry.author.name }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-4 text-center">
+                        <a href="{{ url_for('admin_entries') }}" class="text-green-600 hover:text-green-700 font-semibold text-sm">
+                            View All Entries →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Active Users -->
+        <div class="mt-8 bg-white rounded-lg shadow-md overflow-hidden fade-in" style="animation-delay: 0.6s;">
+            <div class="bg-gradient-to-r from-purple-500 to-pink-600 p-4">
+                <h3 class="text-xl font-bold text-white">🏆 Most Active Users</h3>
+            </div>
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="text-left py-3 px-4 text-gray-600 font-semibold">Rank</th>
+                                <th class="text-left py-3 px-4 text-gray-600 font-semibold">User</th>
+                                <th class="text-left py-3 px-4 text-gray-600 font-semibold">Email</th>
+                                <th class="text-center py-3 px-4 text-gray-600 font-semibold">Entries</th>
+                                <th class="text-center py-3 px-4 text-gray-600 font-semibold">Last Activity</th>
+                                <th class="text-center py-3 px-4 text-gray-600 font-semibold">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users_data[:10] %}
+                            <tr class="border-b hover:bg-gray-50 transition">
+                                <td class="py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full 
+                                        {% if loop.index == 1 %}bg-yellow-100 text-yellow-600
+                                        {% elif loop.index == 2 %}bg-gray-100 text-gray-600
+                                        {% elif loop.index == 3 %}bg-orange-100 text-orange-600
+                                        {% else %}bg-blue-100 text-blue-600{% endif %} font-bold">
+                                        {{ loop.index }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4 font-semibold">{{ user.name }}</td>
+                                <td class="py-3 px-4 text-gray-600">{{ user.email }}</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-semibold">
+                                        {{ user.entry_count }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4 text-center text-sm text-gray-500">
+                                    {% if user.last_entry %}
+                                        {{ user.last_entry.strftime('%b %d, %Y') }}
+                                    {% else %}
+                                        Never
+                                    {% endif %}
+                                </td>
+                                <td class="py-3 px-4 text-center">
+                                    <a href="{{ url_for('admin_user_detail', user_id=user.id) }}" 
+                                       class="text-blue-600 hover:text-blue-700 font-semibold text-sm">
+                                        View →
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center text-gray-600">
+                <p>&copy; 2026 MyJournal Admin Panel. Made with ❤️ by Aman</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
