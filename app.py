@@ -2,12 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from functools import wraps
 import os
 
 app = Flask(__name__)
 
 # Production-ready configuration
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///myjournal.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -16,6 +17,10 @@ if app.config['SQLALCHEMY_DATABASE_URI'].startswith('postgres://'):
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace('postgres://', 'postgresql://', 1)
 
 db = SQLAlchemy(app)
+
+# Admin credentials - Change these!
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')  # Change this in production!
 
 # Database Models
 class User(db.Model):
@@ -37,6 +42,108 @@ class JournalEntry(db.Model):
 @app.route('/')
 def home():
     return render_template('index.html')
+
+# Admin decorator for protected routes
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'admin_logged_in' not in session:
+            flash('Please login as admin to access this page.', 'error')
+            return redirect(url_for('admin_login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# Admin Routes
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['admin_logged_in'] = True
+            flash('Admin login successful!', 'success')
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash('Invalid admin credentials!', 'error')
+    
+    return render_template('admin_login.html')
+
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin_logged_in', None)
+    flash('Admin logged out successfully!', 'success')
+    return redirect(url_for('admin_login'))
+
+@app.route('/admin/dashboard')
+@admin_required
+def admin_dashboard():
+    # Get statistics
+    total_users = User.query.count()
+    total_entries = JournalEntry.query.count()
+    
+    # Get users with entry counts
+    users = User.query.all()
+    users_data = []
+    for user in users:
+        users_data.append({
+            'id': user.id,
+            'name': user.name,
+            'email': user.email,
+            'entry_count': len(user.entries),
+            'joined': user.created_at,
+            'last_entry': user.entries[0].created_at if user.entries else None
+        })
+    
+    # Sort by most recent activity
+    users_data.sort(key=lambda x: x['last_entry'] if x['last_entry'] else datetime.min, reverse=True)
+    
+    # Get recent entries (last 10)
+    recent_entries = JournalEntry.query.order_by(JournalEntry.created_at.desc()).limit(10).all()
+    
+    # Calculate today's stats
+    today = datetime.utcnow().date()
+    today_users = User.query.filter(db.func.date(User.created_at) == today).count()
+    today_entries = JournalEntry.query.filter(db.func.date(JournalEntry.created_at) == today).count()
+    
+    return render_template('admin_dashboard.html',
+                         total_users=total_users,
+                         total_entries=total_entries,
+                         users_data=users_data,
+                         recent_entries=recent_entries,
+                         today_users=today_users,
+                         today_entries=today_entries)
+
+@app.route('/admin/users')
+@admin_required
+def admin_users():
+    users = User.query.order_by(User.created_at.desc()).all()
+    users_data = []
+    for user in users:
+        users_data.append({
+            'id': user.id,
+            'name': user.name,
+            'email': user.email,
+            'entry_count': len(user.entries),
+            'joined': user.created_at,
+            'entries': user.entries
+        })
+    
+    return render_template('admin_users.html', users=users_data)
+
+@app.route('/admin/entries')
+@admin_required
+def admin_entries():
+    entries = JournalEntry.query.order_by(JournalEntry.created_at.desc()).all()
+    return render_template('admin_entries.html', entries=entries)
+
+@app.route('/admin/user/<int:user_id>')
+@admin_required
+def admin_user_detail(user_id):
+    user = User.query.get_or_404(user_id)
+    entries = JournalEntry.query.filter_by(user_id=user_id).order_by(JournalEntry.created_at.desc()).all()
+    
+    return render_template('admin_user_detail.html', user=user, entries=entries)
 
 @app.route('/signup', methods=['POST'])
 def signup():
