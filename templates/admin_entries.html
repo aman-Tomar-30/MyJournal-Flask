@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Entries - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Admin Navigation -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-white">🛡️ Admin Panel</h1>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="{{ url_for('admin_dashboard') }}" class="text-white hover:text-blue-200 transition">Dashboard</a>
+                    <a href="{{ url_for('admin_users') }}" class="text-white hover:text-blue-200 transition">Users</a>
+                    <a href="{{ url_for('admin_entries') }}" class="text-white font-semibold">Entries</a>
+                    <a href="{{ url_for('admin_logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">📝 All Journal Entries</h2>
+            <p class="text-gray-600">View all journal entries across the platform ({{ entries|length }} total)</p>
+        </div>
+
+        <!-- Entries Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gradient-to-r from-green-500 to-teal-600 text-white">
+                        <tr>
+                            <th class="text-left py-4 px-6 font-semibold">Title</th>
+                            <th class="text-left py-4 px-6 font-semibold">Author</th>
+                            <th class="text-left py-4 px-6 font-semibold">Preview</th>
+                            <th class="text-center py-4 px-6 font-semibold">Word Count</th>
+                            <th class="text-center py-4 px-6 font-semibold">Created</th>
+                            <th class="text-center py-4 px-6 font-semibold">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in entries %}
+                        <tr class="border-b hover:bg-gray-50 transition">
+                            <td class="py-4 px-6">
+                                <p class="font-semibold text-gray-900">{{ entry.title[:40] }}{% if entry.title|length > 40 %}...{% endif %}</p>
+                            </td>
+                            <td class="py-4 px-6">
+                                <a href="{{ url_for('admin_user_detail', user_id=entry.user_id) }}" 
+                                   class="text-blue-600 hover:text-blue-700 font-medium">
+                                    {{ entry.author.name }}
+                                </a>
+                            </td>
+                            <td class="py-4 px-6">
+                                <p class="text-sm text-gray-600">{{ entry.content[:60] }}{% if entry.content|length > 60 %}...{% endif %}</p>
+                            </td>
+                            <td class="py-4 px-6 text-center">
+                                <span class="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold">
+                                    {{ entry.content.split()|length }} words
+                                </span>
+                            </td>
+                            <td class="py-4 px-6 text-center text-sm text-gray-600">
+                                {{ entry.created_at.strftime('%b %d, %Y') }}<br>
+                                <span class="text-xs text-gray-500">{{ entry.created_at.strftime('%I:%M %p') }}</span>
+                            </td>
+                            <td class="py-4 px-6 text-center">
+                                <button onclick="viewEntry({{ entry.id }}, '{{ entry.title }}', '{{ entry.content }}', '{{ entry.author.name }}', '{{ entry.created_at.strftime('%b %d, %Y at %I:%M %p') }}')" 
+                                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-semibold">
+                                    View Full
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        {% if not entries %}
+        <div class="bg-white rounded-lg shadow-md p-12 text-center">
+            <div class="text-6xl mb-4">📝</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">No Entries Yet</h3>
+            <p class="text-gray-600">Journal entries will appear here once users start writing</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Entry Modal -->
+    <div id="entry-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="bg-gradient-to-r from-green-500 to-teal-600 p-6 text-white">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 id="modal-title" class="text-2xl font-bold mb-2"></h2>
+                        <p id="modal-author" class="text-sm opacity-90"></p>
+                        <p id="modal-date" class="text-xs opacity-75"></p>
+                    </div>
+                    <button onclick="closeModal()" class="text-white hover:text-gray-200 text-3xl">&times;</button>
+                </div>
+            </div>
+            <div class="p-8">
+                <div id="modal-content" class="prose max-w-none text-gray-800 whitespace-pre-wrap"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center text-gray-600">
+                <p>&copy; 2026 MyJournal Admin Panel</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function viewEntry(id, title, content, author, date) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-author').textContent = 'By: ' + author;
+            document.getElementById('modal-date').textContent = date;
+            document.getElementById('modal-content').textContent = content;
+            document.getElementById('entry-modal').classList.remove('hidden');
+            document.getElementById('entry-modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('entry-modal').classList.add('hidden');
+            document.getElementById('entry-modal').classList.remove('flex');
+        }
+
+        // Close modal on outside click
+        document.getElementById('entry-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
