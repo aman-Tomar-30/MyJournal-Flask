@@ -39,7 +39,7 @@
 
 ---
 
-## 🌟 About The Project
+## About The Project 🌟
 
 **MyJournal** is a full-stack personal diary web application that provides users with a private, secure space to document their thoughts, experiences, and memories. Built with modern web technologies, it features a beautiful user interface, comprehensive admin dashboard, and robust security measures.
 
@@ -205,10 +205,6 @@ Follow these steps to get MyJournal running on your local machine.
    - Click "Read More" to view full entry
    - Edit or delete entries as needed
 
-4. **Search**
-   - Use the search bar in navigation
-   - Find entries by keywords
-   - View search results
 
 ### For Admins
 
@@ -276,7 +272,6 @@ MyJournal-Flask/
 ├── .gitignore                 # Git ignore rules
 ├── README.md                  # This file
 ├── DEPLOYMENT_GUIDE.md        # Detailed deployment guide
-├── LICENSE                    # MIT License
 │
 ├── templates/                 # HTML templates
 │   ├── index.html            # Homepage
@@ -337,9 +332,9 @@ MyJournal-Flask/
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `SECRET_KEY` | Flask secret key for sessions |
-| `ADMIN_USERNAME` | Admin panel username |
-| `ADMIN_PASSWORD` | Admin panel password | 
+| `SECRET_KEY` | Flask secret key for sessions | `your-secret-key-here` |
+| `ADMIN_USERNAME` | Admin panel username | `admin` |
+| `ADMIN_PASSWORD` | Admin panel password | `secure-password-123` |
 
 ### Optional Variables
 
@@ -391,7 +386,7 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 - 🐙 GitHub: [@aman-Tomar-30](https://github.com/aman-Tomar-30)
 
 **Project Links:**
-- 🔗 Live Demo: [https://your-app.onrender.com](https://myjournal-9h9n.onrender.com)
+- 🔗 Live Demo: [https://myjournal-9h9n.onrender.com](https://myjournal-9h9n.onrender.com)
 - 📁 Repository: [https://github.com/aman-Tomar-30/MyJournal-Flask](https://github.com/aman-Tomar-30/MyJournal-Flask)
 - 🐛 Report Issues: [GitHub Issues](https://github.com/aman-Tomar-30/MyJournal-Flask/issues)
 
