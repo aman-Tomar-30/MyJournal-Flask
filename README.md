@@ -20,7 +20,7 @@
 
 ## 📖 Table of Contents
 
-- [About The Project](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#about-the-project-)
+- [About The Project](#about-the-project-)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
