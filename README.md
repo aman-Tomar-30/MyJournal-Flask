@@ -20,7 +20,7 @@
 
 ## 📖 Table of Contents
 
-- [About The Project](#about-the-project)
+- [About The Project](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#about-the-project-)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
@@ -39,7 +39,7 @@
 
 ---
 
-## About The Project 🌟
+## 🌟 About The Project 
 
 **MyJournal** is a full-stack personal diary web application that provides users with a private, secure space to document their thoughts, experiences, and memories. Built with modern web technologies, it features a beautiful user interface, comprehensive admin dashboard, and robust security measures.
 
@@ -48,7 +48,6 @@
 - 🔒 **Private & Secure** - Your thoughts are encrypted and protected
 - 🎨 **Beautiful Design** - Modern, responsive UI with smooth animations
 - 📊 **Admin Dashboard** - Complete monitoring and analytics system
-- 🔍 **Smart Search** - Find your entries instantly
 - 📱 **Mobile Friendly** - Write from anywhere, on any device
 - ⚡ **Fast & Reliable** - Built with performance in mind
 
