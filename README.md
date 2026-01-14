@@ -20,22 +20,22 @@
 
 ## 📖 Table of Contents
 
-- [About The Project](#about-the-project-)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
+- [About The Project](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-about-the-project)
+- [Features](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-features)
+- [Tech Stack](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#%EF%B8%8F-tech-stack)
+- [Getting Started](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Running Locally](#running-locally)
-- [Usage](#usage)
-- [Admin Panel](#admin-panel)
-- [Project Structure](#project-structure)
-- [API Routes](#api-routes)
-- [Environment Variables](#environment-variables)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-- [Notes](#notes)
+- [Usage](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-usage)
+- [Admin Panel](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#%EF%B8%8F-admin-panel)
+- [Project Structure](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-project-structure)
+- [API Routes](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-api-routes)
+- [Environment Variables](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-environment-variables)
+- [Contributing](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-contributing)
+- [License](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-license)
+- [Contact](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#%E2%80%8D-contact)
+- [Notes](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-notes)
 
 ---
 
