@@ -271,6 +271,7 @@ MyJournal-Flask/
 ├── .gitignore                 # Git ignore rules
 ├── README.md                  # This file
 ├── DEPLOYMENT_GUIDE.md        # Detailed deployment guide
+├── LICENSE                    # MIT License
 │
 ├── templates/                 # HTML templates
 │   ├── index.html            # Homepage
