@@ -244,7 +244,6 @@ After deployment:
 **Admin login fails?**
 - Verify environment variables are set
 - Check for typos in username/password
-```
 
 ---
 
