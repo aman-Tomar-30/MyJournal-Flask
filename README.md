@@ -27,6 +27,7 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Running Locally](#running-locally)
+- [Deployment](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-deployment)
 - [Usage](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-usage)
 - [Admin Panel](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#%EF%B8%8F-admin-panel)
 - [Project Structure](https://github.com/aman-Tomar-30/MyJournal-Flask?tab=readme-ov-file#-project-structure)
@@ -181,6 +182,69 @@ Follow these steps to get MyJournal running on your local machine.
    ```
 
 3. **Create an account and start journaling!** 📝
+
+---
+
+## 🌐 Deployment
+
+MyJournal is production-ready and can be deployed to Render in minutes.
+
+### Quick Deploy to Render
+
+1. **Fork/Clone this repository**
+
+2. **Sign up on [Render](https://render.com)** (free account)
+
+3. **Create a New Web Service**
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+   - Select the `myjournal` repo
+
+4. **Configure Settings**
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `gunicorn app:app`
+   - **Instance Type:** Free
+
+5. **Set Environment Variables**
+```
+   SECRET_KEY=<click-generate-button>
+   ADMIN_USERNAME=<your-admin-username>
+   ADMIN_PASSWORD=<your-secure-password>
+```
+
+6. **Click "Create Web Service"**
+
+7. **Done!** Your app will be live in 2-3 minutes 🚀
+
+### Environment Variables Explained
+
+- `SECRET_KEY` - Flask session security (click "Generate" in Render)
+- `ADMIN_USERNAME` - Your custom admin username (don't use "admin")
+- `ADMIN_PASSWORD` - Strong password for admin panel (12+ characters)
+- `DATABASE_URL` - Optional PostgreSQL URL (defaults to SQLite)
+
+### Post-Deployment
+
+After deployment:
+- Visit your live URL
+- Create a user account
+- Access admin panel at `/admin/login`
+- Change admin credentials from defaults!
+
+### Troubleshooting
+
+**Build fails?**
+- Check `requirements.txt` has all dependencies
+- Verify Python version compatibility
+
+**Database errors?**
+- SQLite is used by default
+- Database auto-creates on first run
+
+**Admin login fails?**
+- Verify environment variables are set
+- Check for typos in username/password
+```
 
 ---
 
