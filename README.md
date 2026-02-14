@@ -110,7 +110,7 @@
 
 ### Backend
 - **Framework:** Flask 3.0.0
-- **Database:** SQLite / PostgreSQL
+- **Database:**  Supabase's PostgreSQL / SQLite 
 - **ORM:** SQLAlchemy 3.1.1
 - **Security:** Werkzeug 3.0.1 (Password Hashing)
 - **Server:** Gunicorn 21.2.0
@@ -123,7 +123,7 @@
 
 ### Deployment
 - **Platform:** Render
-- **Database:** Managed PostgreSQL / SQLite
+- **Database:** Managed Supabase / SQLite
 - **Environment:** Production-ready with environment variables
 
 ### Development Tools
@@ -210,6 +210,7 @@ MyJournal is production-ready and can be deployed to Render in minutes.
    SECRET_KEY=<click-generate-button>
    ADMIN_USERNAME=<your-admin-username>
    ADMIN_PASSWORD=<your-secure-password>
+   DATABASE_URL = <supabase-url>
 ```
 
 6. **Click "Create Web Service"**
@@ -221,7 +222,7 @@ MyJournal is production-ready and can be deployed to Render in minutes.
 - `SECRET_KEY` - Flask session security (click "Generate" in Render)
 - `ADMIN_USERNAME` - Your custom admin username (don't use "admin")
 - `ADMIN_PASSWORD` - Strong password for admin panel (12+ characters)
-- `DATABASE_URL` - Optional PostgreSQL URL (defaults to SQLite)
+- `DATABASE_URL` -  Supabase's PostgreSQL Database URL (defaults to SQLite)
 
 ### Post-Deployment
 
@@ -350,7 +351,7 @@ MyJournal-Flask/
 │   ├── admin_entries.html    # Entry management
 │   └── admin_user_detail.html # User details
 │
-└── instance/                  # Instance folder (auto-created) (Includes in .gitignore)
+└── instance/                  # Instance folder (auto-created If Supabase URL not Found)(Includes in .gitignore) 
     └── myjournal.db          # SQLite database
 ```
 
@@ -403,7 +404,7 @@ MyJournal-Flask/
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `DATABASE_URL` | PostgreSQL connection URL | `sqlite:///myjournal.db` |
+| `DATABASE_URL` | Supabase connection URL | `sqlite:///myjournal.db` |
 | `FLASK_ENV` | Flask environment | `production` |
 | `PYTHON_VERSION` | Python version for Render | `3.11.0` |
 
